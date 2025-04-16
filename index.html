@@ -2,63 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Email Signature Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>W&L Signature Generator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Palatino, Arial, serif;
       padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      background-color: #f8f9fa;
     }
 
     input {
       display: block;
       margin-bottom: 10px;
-      padding: 6px;
+      padding: 8px;
       width: 100%;
     }
 
     button {
-      margin-top: 10px;
       padding: 10px 16px;
-      background-color: #8c1d40;
+      background-color: #003089;
       color: white;
       border: none;
       cursor: pointer;
     }
 
-    #preview-wrapper {
-      margin-top: 30px;
-      padding: 15px;
-      border-top: 2px solid #8c1d40;
-    }
-
     #signature-preview {
-      border: 1px dashed #ccc;
-      padding: 15px;
-      background-color: #f9f9f9;
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
     }
 
     #copied-message {
-      display: none;
       color: green;
       margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h2>Email Signature Generator</h2>
+  <h2>W&L Email Signature Generator</h2>
+
   <input id="name" placeholder="Name" />
   <input id="title" placeholder="Title" />
   <input id="department" placeholder="Department" />
   <input id="email" placeholder="Email" />
   <input id="phone" placeholder="Phone" />
+  <input id="office" placeholder="Office Location" />
+  <input id="link1" placeholder="Link 1 (optional)" />
+  <input id="link2" placeholder="Link 2 (optional)" />
+  <input id="link3" placeholder="Link 3 (optional)" />
+  <input id="link4" placeholder="Link 4 (optional)" />
+
   <button onclick="generateSignature()">Generate Signature</button>
 
-  <div id="preview-wrapper">
-    <h3>Your Signature</h3>
-    <div id="signature-preview" contenteditable="true"></div>
-    <button onclick="copyStyledSignature()">Copy to Clipboard</button>
-    <div id="copied-message">✅ Copied!</div>
-  </div>
+  <div id="signature-preview" contenteditable="true"></div>
+  <button onclick="copyStyledSignature()">Copy to Clipboard</button>
+  <div id="copied-message">✅ Signature copied!</div>
 
   <script>
     function generateSignature() {
@@ -67,37 +69,46 @@
       const dept = document.getElementById("department").value;
       const email = document.getElementById("email").value;
       const phone = document.getElementById("phone").value;
+      const office = document.getElementById("office").value;
+      const links = ["link1", "link2", "link3", "link4"].map(id => document.getElementById(id).value).filter(Boolean);
 
-      const html = `
-        <div style="font-family: Arial, sans-serif; line-height: 1.4;">
-          <div style="font-size: 16px; font-weight: bold; color: #8c1d40;">${name}</div>
-          <div style="font-size: 14px;">${title}</div>
-          <div style="font-size: 14px;">${dept}</div>
-          <div style="font-size: 13px; color: #555;">
-            <a href="mailto:${email}" style="color: #555; text-decoration: none;">${email}</a> | ${phone}
-          </div>
-        </div>
+      const linkHtml = links.map(l => `<a href="${l}" style="color:#003089; text-decoration:none;">${l}</a>`).join(" | ");
+
+      const signatureHTML = `
+        <table cellpadding="0" cellspacing="0" style="font-family: Palatino, Arial, serif; font-size: 14px; color: #333;">
+          <tr>
+            <td style="vertical-align: top; padding-right: 15px;">
+              <img src="TRIDENT-wlublue.png" alt="W&L logo" style="width: 80px; height: auto;" />
+            </td>
+            <td style="vertical-align: top;">
+              <div style="font-weight: bold; font-size: 16px; color: #003089;">${name}</div>
+              <div>${title}</div>
+              <div>${dept}</div>
+              <div><a href="mailto:${email}" style="color:#003089; text-decoration:none;">${email}</a> | ${phone}</div>
+              <div>${office}</div>
+              ${linkHtml ? `<div style="margin-top: 6px;">${linkHtml}</div>` : ""}
+            </td>
+          </tr>
+        </table>
       `;
 
-      document.getElementById("signature-preview").innerHTML = html;
+      document.getElementById("signature-preview").innerHTML = signatureHTML;
       document.getElementById("copied-message").style.display = "none";
     }
 
     function copyStyledSignature() {
       const range = document.createRange();
-      const node = document.getElementById("signature-preview");
-      range.selectNodeContents(node);
+      const signature = document.getElementById("signature-preview");
+      range.selectNodeContents(signature);
       const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(range);
 
       try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          document.getElementById("copied-message").style.display = "block";
-        }
+        document.execCommand("copy");
+        document.getElementById("copied-message").style.display = "block";
       } catch (err) {
-        alert("Copy failed. Try manually selecting the signature and copying it.");
+        alert("Copy failed. Try selecting and copying manually.");
       }
     }
   </script>

@@ -48,7 +48,7 @@
   </style>
 </head>
 <body>
-  <h2>W&L Advancement Email Signature Generator</h2>
+  <h2>W&L Advancement Signature Generator</h2>
 
   <input id="name" placeholder="Name" />
   <input id="pronouns" placeholder="Pronouns (optional)" />
@@ -62,7 +62,7 @@
   <input id="link2" placeholder="Link 2" />
   <input id="link3" placeholder="Link 3" />
   <input id="link4" placeholder="Link 4" />
-  <label><input type="checkbox" id="includeLogo" checked /> Include Campaign Logo</label>
+  <label><input type="checkbox" id="includeLogo" checked /> Include W&L Logo</label>
 
   <button onclick="generateSignature()">Generate Signature</button>
 
@@ -85,7 +85,7 @@
 
       const linkHtml = links.map(l => `<a href="${l.startsWith('http') ? l : '#'}" style="color:#003089; text-decoration:none; font-weight: bold;">${l}</a>`).join(" | ");
 
-      const logoHTML = includeLogo ? `<tr><td colspan='2' style="padding-top: 10px;"><a href="https://campaign.wlu.edu" target="_blank"><img src="https://raw.githubusercontent.com/atmeeker/signature-generator/refs/heads/main/LLC_horizontal.png" alt="W&L logo" style="width: 200px; height: auto;" /></a></td></tr>` : "";
+      const logoHTML = includeLogo ? `<tr><td colspan='2' style="padding-top: 10px;"><a href="https://campaign.wlu.edu" target="_blank"><img src="https://raw.githubusercontent.com/YOUR-GITHUB-USERNAME/YOUR-REPO-NAME/main/TRIDENT-wlublue.png" alt="W&L logo" width="200" style="height: auto; display: block;" /></a></td></tr>` : "";
 
       const signatureHTML = `
         <table cellpadding="0" cellspacing="0" style="font-family: Palatino, Arial, serif; font-size: 14px; color: #333;">

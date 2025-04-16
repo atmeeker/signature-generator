@@ -13,11 +13,16 @@
       background-color: #f8f9fa;
     }
 
-    input {
+    input, label {
       display: block;
       margin-bottom: 10px;
       padding: 8px;
       width: 100%;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
     }
 
     button {
@@ -46,15 +51,18 @@
   <h2>W&L Email Signature Generator</h2>
 
   <input id="name" placeholder="Name" />
-  <input id="title" placeholder="Title" />
-  <input id="department" placeholder="Department" />
+  <input id="pronouns" placeholder="Pronouns (optional)" />
+  <input id="title" placeholder="Job Title" />
+  <input id="office" placeholder="Office or Department Name" />
+  <input id="university" value="Washington and Lee University" disabled />
   <input id="email" placeholder="Email" />
-  <input id="phone" placeholder="Phone" />
-  <input id="office" placeholder="Office Location" />
-  <input id="link1" placeholder="Link 1 (optional)" />
-  <input id="link2" placeholder="Link 2 (optional)" />
-  <input id="link3" placeholder="Link 3 (optional)" />
-  <input id="link4" placeholder="Link 4 (optional)" />
+  <input id="phone" placeholder="Phone Number" />
+  <input id="location" placeholder="Office Location" />
+  <input id="link1" placeholder="Link 1 (e.g., @wlualum)" />
+  <input id="link2" placeholder="Link 2" />
+  <input id="link3" placeholder="Link 3" />
+  <input id="link4" placeholder="Link 4" />
+  <label><input type="checkbox" id="includeLogo" checked /> Include W&L Logo</label>
 
   <button onclick="generateSignature()">Generate Signature</button>
 
@@ -65,28 +73,35 @@
   <script>
     function generateSignature() {
       const name = document.getElementById("name").value;
+      const pronouns = document.getElementById("pronouns").value;
       const title = document.getElementById("title").value;
-      const dept = document.getElementById("department").value;
+      const office = document.getElementById("office").value;
+      const university = document.getElementById("university").value;
       const email = document.getElementById("email").value;
       const phone = document.getElementById("phone").value;
-      const office = document.getElementById("office").value;
+      const location = document.getElementById("location").value;
+      const includeLogo = document.getElementById("includeLogo").checked;
       const links = ["link1", "link2", "link3", "link4"].map(id => document.getElementById(id).value).filter(Boolean);
 
-      const linkHtml = links.map(l => `<a href="${l}" style="color:#003089; text-decoration:none;">${l}</a>`).join(" | ");
+      const linkHtml = links.map(l => `<a href="${l.startsWith('http') ? l : '#'}" style="color:#003089; text-decoration:none; font-weight: bold;">${l}</a>`).join(" | ");
+
+      const logoHTML = includeLogo ? `<td style=\"vertical-align: top; padding-right: 15px;\"><img src=\"https://raw.githubusercontent.com/atmeeker/signature-generator/2bbf5490d4e0146b095cfde6d3f835a1fe9ca0ff/llc_sig.png" alt=\"W&L logo\" style=\"width: 80px; height: auto;\" /></td>` : "";
 
       const signatureHTML = `
         <table cellpadding="0" cellspacing="0" style="font-family: Palatino, Arial, serif; font-size: 14px; color: #333;">
           <tr>
-            <td style="vertical-align: top; padding-right: 15px;">
-              <img src="TRIDENT-wlublue.png" alt="W&L logo" style="width: 80px; height: auto;" />
-            </td>
+            ${logoHTML}
             <td style="vertical-align: top;">
-              <div style="font-weight: bold; font-size: 16px; color: #003089;">${name}</div>
-              <div>${title}</div>
-              <div>${dept}</div>
-              <div><a href="mailto:${email}" style="color:#003089; text-decoration:none;">${email}</a> | ${phone}</div>
-              <div>${office}</div>
-              ${linkHtml ? `<div style="margin-top: 6px;">${linkHtml}</div>` : ""}
+              <div style="font-weight: bold; font-size: 16px; color: #333333;">
+                ${name}${pronouns ? ` <span style='font-style: italic; font-weight: normal;'>(${pronouns})</span>` : ""}
+              </div>
+              <div style="font-weight: bold; color: #333333;">${title}</div>
+              <div style="color: #555;">${office}</div>
+              <div style="color: #555;">${university}</div>
+              <div style="color: #555;">
+                <a href="mailto:${email}" style="color:#003089; text-decoration:none;">${email}</a> | ${phone} | ${location}
+              </div>
+              ${linkHtml ? `<div style=\"margin-top: 8px;\">${linkHtml}</div>` : ""}
             </td>
           </tr>
         </table>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Signature Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 6px;
+      margin-top: 4px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 16px;
+      background-color: #8c1d40;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #signature-preview {
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 2px solid #8c1d40;
+    }
+
+    .signature-name {
+      font-weight: bold;
+      font-size: 16px;
+      color: #8c1d40;
+    }
+
+    .signature-title, .signature-dept {
+      font-size: 14px;
+    }
+
+    .signature-contact {
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Email Signature Generator</h1>
+
+  <form id="signature-form">
+    <label>Name: <input type="text" id="name" /></label>
+    <label>Title: <input type="text" id="title" /></label>
+    <label>Department: <input type="text" id="department" /></label>
+    <label>Email: <input type="email" id="email" /></label>
+    <label>Phone: <input type="text" id="phone" /></label>
+    <button type="button" onclick="generateSignature()">Generate Signature</button>
+  </form>
+
+  <div id="signature-preview"></div>
+  <button onclick="copySignature()">Copy to Clipboard</button>
+
+  <script>
+    function generateSignature() {
+      const name = document.getElementById("name").value;
+      const title = document.getElementById("title").value;
+      const dept = document.getElementById("department").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+
+      const signatureHTML = `
+        <div>
+          <div class="signature-name">${name}</div>
+          <div class="signature-title">${title}</div>
+          <div class="signature-dept">${dept}</div>
+          <div class="signature-contact">
+            <a href="mailto:${email}">${email}</a> | ${phone}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("signature-preview").innerHTML = signatureHTML;
+    }
+
+    function copySignature() {
+      const range = document.createRange();
+      const signature = document.getElementById("signature-preview");
+      range.selectNode(signature);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand("copy");
+      alert("Signature copied to clipboard!");
+    }
+  </script>
+
+</body>
+</html>

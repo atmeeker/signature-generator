@@ -2,29 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Email Signature Generator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
     }
 
     input {
-      width: 100%;
+      display: block;
+      margin-bottom: 10px;
       padding: 6px;
-      margin-top: 4px;
+      width: 100%;
     }
 
     button {
-      margin-top: 20px;
+      margin-top: 10px;
       padding: 10px 16px;
       background-color: #8c1d40;
       color: white;
@@ -32,43 +25,40 @@
       cursor: pointer;
     }
 
-    #signature-preview {
+    #preview-wrapper {
       margin-top: 30px;
-      padding-top: 15px;
+      padding: 15px;
       border-top: 2px solid #8c1d40;
     }
 
-    .signature-name {
-      font-weight: bold;
-      font-size: 16px;
-      color: #8c1d40;
+    #signature-preview {
+      border: 1px dashed #ccc;
+      padding: 15px;
+      background-color: #f9f9f9;
     }
 
-    .signature-title, .signature-dept {
-      font-size: 14px;
-    }
-
-    .signature-contact {
-      font-size: 13px;
-      color: #555;
+    #copied-message {
+      display: none;
+      color: green;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
+  <h2>Email Signature Generator</h2>
+  <input id="name" placeholder="Name" />
+  <input id="title" placeholder="Title" />
+  <input id="department" placeholder="Department" />
+  <input id="email" placeholder="Email" />
+  <input id="phone" placeholder="Phone" />
+  <button onclick="generateSignature()">Generate Signature</button>
 
-  <h1>Email Signature Generator</h1>
-
-  <form id="signature-form">
-    <label>Name: <input type="text" id="name" /></label>
-    <label>Title: <input type="text" id="title" /></label>
-    <label>Department: <input type="text" id="department" /></label>
-    <label>Email: <input type="email" id="email" /></label>
-    <label>Phone: <input type="text" id="phone" /></label>
-    <button type="button" onclick="generateSignature()">Generate Signature</button>
-  </form>
-
-  <div id="signature-preview"></div>
-  <button onclick="copySignature()">Copy to Clipboard</button>
+  <div id="preview-wrapper">
+    <h3>Your Signature</h3>
+    <div id="signature-preview" contenteditable="true"></div>
+    <button onclick="copyStyledSignature()">Copy to Clipboard</button>
+    <div id="copied-message">✅ Copied!</div>
+  </div>
 
   <script>
     function generateSignature() {
@@ -78,31 +68,38 @@
       const email = document.getElementById("email").value;
       const phone = document.getElementById("phone").value;
 
-      const signatureHTML = `
-        <div>
-          <div class="signature-name">${name}</div>
-          <div class="signature-title">${title}</div>
-          <div class="signature-dept">${dept}</div>
-          <div class="signature-contact">
-            <a href="mailto:${email}">${email}</a> | ${phone}
+      const html = `
+        <div style="font-family: Arial, sans-serif; line-height: 1.4;">
+          <div style="font-size: 16px; font-weight: bold; color: #8c1d40;">${name}</div>
+          <div style="font-size: 14px;">${title}</div>
+          <div style="font-size: 14px;">${dept}</div>
+          <div style="font-size: 13px; color: #555;">
+            <a href="mailto:${email}" style="color: #555; text-decoration: none;">${email}</a> | ${phone}
           </div>
         </div>
       `;
 
-      document.getElementById("signature-preview").innerHTML = signatureHTML;
+      document.getElementById("signature-preview").innerHTML = html;
+      document.getElementById("copied-message").style.display = "none";
     }
 
-    function copySignature() {
+    function copyStyledSignature() {
       const range = document.createRange();
-      const signature = document.getElementById("signature-preview");
-      range.selectNode(signature);
+      const node = document.getElementById("signature-preview");
+      range.selectNodeContents(node);
       const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(range);
-      document.execCommand("copy");
-      alert("Signature copied to clipboard!");
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          document.getElementById("copied-message").style.display = "block";
+        }
+      } catch (err) {
+        alert("Copy failed. Try manually selecting the signature and copying it.");
+      }
     }
   </script>
-
 </body>
 </html>

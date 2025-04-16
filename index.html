@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>W&L Advancement Signature Generator</title>
+  <title>W&L Signature Generator</title>
   <style>
     body {
       font-family: Palatino, Arial, serif;
@@ -62,7 +62,6 @@
   <input id="link2" placeholder="Link 2" />
   <input id="link3" placeholder="Link 3" />
   <input id="link4" placeholder="Link 4" />
-  <input id="campaign" placeholder="Campaign URL (optional)" />
   <label><input type="checkbox" id="includeLogo" checked /> Include W&L Logo</label>
 
   <button onclick="generateSignature()">Generate Signature</button>
@@ -82,20 +81,17 @@
       const phone = document.getElementById("phone").value;
       const location = document.getElementById("location").value;
       const includeLogo = document.getElementById("includeLogo").checked;
-      const campaign = document.getElementById("campaign").value;
       const links = ["link1", "link2", "link3", "link4"].map(id => document.getElementById(id).value).filter(Boolean);
 
       const linkHtml = links.map(l => `<a href="${l.startsWith('http') ? l : '#'}" style="color:#003089; text-decoration:none; font-weight: bold;">${l}</a>`).join(" | ");
 
-      const logoHTML = includeLogo ? `<tr><td colspan='2' style="padding-top: 10px;"><img src="https://raw.githubusercontent.com/YOUR-GITHUB-USERNAME/YOUR-REPO-NAME/main/TRIDENT-wlublue.png" alt="W&L logo" style="width: 200px; height: auto;" /></td></tr>` : "";
-
-      const campaignHTML = campaign ? `<div style='font-style: italic; font-size: 13px; margin-top: 6px;'>Learn more at <a href='${campaign}' style='color: #003089;'>${campaign}</a>.</div>` : "";
+      const logoHTML = includeLogo ? `<tr><td colspan='2' style="padding-top: 10px;"><a href="https://campaign.wlu.edu" target="_blank"><img src="https://raw.githubusercontent.com/atmeeker/signature-generator/refs/heads/main/LLC_horizontal.png" alt="W&L logo" style="width: 200px; height: auto;" /></a></td></tr>` : "";
 
       const signatureHTML = `
         <table cellpadding="0" cellspacing="0" style="font-family: Palatino, Arial, serif; font-size: 14px; color: #333;">
           <tr>
             <td colspan="2">
-              <div style="font-family: Arial, sans-serif; font-weight: bold; font-size: 16px; color: #003089;">
+              <div style="font-family: Arial, sans-serif; font-weight: bold; font-size: 16px; color: #333333;">
                 ${name}${pronouns ? ` <span style='font-style: italic; font-weight: normal;'>(${pronouns})</span>` : ""}
               </div>
               <div style="font-weight: bold; color: #333333;">${title}</div>
@@ -109,7 +105,7 @@
           </tr>
           ${logoHTML}
         </table>
-        ${campaignHTML}
+        <div style='font-style: italic; font-size: 13px; margin-top: 6px;'>Learn more at <a href='https://campaign.wlu.edu' style='color: #003089;'>campaign.wlu.edu</a>.</div>
       `;
 
       document.getElementById("signature-preview").innerHTML = signatureHTML;
